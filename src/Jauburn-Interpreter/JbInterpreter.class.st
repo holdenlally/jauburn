@@ -13,6 +13,11 @@ Class {
 	#category : #'Jauburn-Interpreter-Core'
 }
 
+{ #category : #primitives }
+JbInterpreter >> concatBinding [
+	^ #concat -> [ :s1 :s2 | s1, ' ', s2 ]
+]
+
 { #category : #accessing }
 JbInterpreter >> environment [ 
 
@@ -20,16 +25,28 @@ JbInterpreter >> environment [
 ]
 
 { #category : #initialization }
-JbInterpreter >> initialize [ 
-
+JbInterpreter >> initialize [
+	| prims |
 	super initialize.
-	environment := JbEnvironment new
+	environment := JbEnvironment new.
+	prims := self class selectors
+		select: [ :method | method endsWith: 'Binding' ].
+	prims
+		do: [ :method | 
+			| prim |
+			prim := self perform: method.
+			environment at: prim key put: (JbPrimitive new block: prim value; yourself)]
 ]
 
 { #category : #api }
 JbInterpreter >> interpret: ast [
 
 	^ast executeIn: environment 
+]
+
+{ #category : #primitives }
+JbInterpreter >> printBinding [
+	^#print -> [ :value | Transcript show: value printString ]
 ]
 
 { #category : #api }

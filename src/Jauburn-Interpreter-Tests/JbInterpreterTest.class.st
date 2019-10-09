@@ -25,7 +25,7 @@ JbInterpreterTest >> setUp [
 ]
 
 { #category : #running }
-JbInterpreterTest >> testBooleanExpressions [
+JbInterpreterTest >> testComparisonExpressions [
 
 	self interpret: 'var u = 1 == 1;'.
 	self interpret: 'var v = 1 < 2;'.
@@ -76,6 +76,16 @@ JbInterpreterTest >> testDeclarationCreatesVariable [
 ]
 
 { #category : #running }
+JbInterpreterTest >> testFunction [
+	
+	self interpret: 'var x = function(a, b, c) {};'.
+	self assert: (interpreter environment at: 'x') parameters size equals: 3.
+	self assert: (interpreter environment at: 'x') body isEmpty.
+	self assert: (interpreter environment at: 'x') environment equals: interpreter environment
+	
+]
+
+{ #category : #running }
 JbInterpreterTest >> testFunctionCall [
 	
 	self interpret: 'var x = function(a, b, c) {return a * b * c;};var y = x(1, 2, 3);'.
@@ -84,11 +94,14 @@ JbInterpreterTest >> testFunctionCall [
 ]
 
 { #category : #running }
-JbInterpreterTest >> testFunctionDefinition [
-	
-	self interpret: 'var x = function(a, b, c) {};'.
-	self assert: (interpreter environment at: 'x') parameters size equals: 3.
-	self assert: (interpreter environment at: 'x') body isEmpty.
-	self assert: (interpreter environment at: 'x') environment equals: interpreter environment
-	
+JbInterpreterTest >> testPrimitiveFunctionCalls [
+
+	self interpret: 'var x = concat("hello", "world");'.
+	self assert: (interpreter environment at: 'x') equals: 'hello world'.
+]
+
+{ #category : #running }
+JbInterpreterTest >> testSingleArityExpression [
+	self interpret: 'var x = 3;var y = -x;'.
+	self assert: (interpreter environment at: 'y') equals: -3
 ]
