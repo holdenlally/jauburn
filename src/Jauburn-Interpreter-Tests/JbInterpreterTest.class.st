@@ -96,8 +96,36 @@ JbInterpreterTest >> testFunctionCall [
 { #category : #running }
 JbInterpreterTest >> testPrimitiveFunctionCalls [
 
-	self interpret: 'var x = concat("hello", "world");'.
+	self interpret: 'var x = abs(-120);'.
+	self interpret: 'var y = abs(120);'.
+	self assert: (interpreter environment at: 'x') equals: 120.
+	self assert: (interpreter environment at: 'y') equals: 120.
+	
+	self interpret: 'var x = concat("hello", " world");'.
+	self interpret: 'var y = concat("a", "bc");'.
 	self assert: (interpreter environment at: 'x') equals: 'hello world'.
+	self assert: (interpreter environment at: 'y') equals: 'abc'.
+	
+	self interpret: 'var x = length("hello");'.
+	self interpret: 'var y = length("");'.
+	self assert: (interpreter environment at: 'x') equals: 5.
+	self assert: (interpreter environment at: 'y') equals: 0.
+	
+	self interpret: 'var x = mod(10, 5);'.
+	self interpret: 'var y = mod(-10, 5);'.
+	self interpret: 'var z = mod(1, 2);'.
+	self assert: (interpreter environment at: 'x') equals: 0.
+	self assert: (interpreter environment at: 'y') equals: 0.
+	self assert: (interpreter environment at: 'z') equals: 1.
+	
+	self interpret: 'var x = not(true);'.
+	self interpret: 'var y = not(false);'.
+	self deny: (interpreter environment at: 'x').
+	self assert: (interpreter environment at: 'y').
+	
+
+	
+	
 ]
 
 { #category : #running }
