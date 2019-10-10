@@ -2,8 +2,8 @@ Extension { #name : #JbWhileLoopNode }
 
 { #category : #'*Jauburn-Interpreter' }
 JbWhileLoopNode >> executeIn: anEnvironment [
-	(condition evaluateIn: anEnvironment)
+	[condition evaluateIn: anEnvironment]
 		whileTrue:
-			(trueStatements
-				do: [ :statement | statement executeIn: anEnvironment ])
+			[trueStatements
+				do: [ :statement | statement executeIn: anEnvironment ]]
 ]

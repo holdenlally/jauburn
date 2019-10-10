@@ -8,7 +8,9 @@ Class {
 	#name : #JbInterpreter,
 	#superclass : #Object,
 	#instVars : [
-		'environment'
+		'environment',
+		'transcript',
+		'uimanager'
 	],
 	#category : #'Jauburn-Interpreter-Core'
 }
@@ -43,6 +45,11 @@ JbInterpreter >> initialize [
 			environment at: prim key put: (JbPrimitive new block: prim value; yourself)]
 ]
 
+{ #category : #primitives }
+JbInterpreter >> inputBinding [
+	^#input -> [ :prompt | (self uimanager request: prompt) ]
+]
+
 { #category : #api }
 JbInterpreter >> interpret: ast [
 
@@ -66,7 +73,12 @@ JbInterpreter >> notBinding [
 
 { #category : #primitives }
 JbInterpreter >> printBinding [
-	^#print -> [ :value | Transcript show: value printString ]
+	^#print -> [ :value | self transcript show: value asString ]
+]
+
+{ #category : #primitives }
+JbInterpreter >> printlnBinding [
+	^#println -> [ :value | self transcript show: value asString; cr ]
 ]
 
 { #category : #api }
@@ -75,4 +87,24 @@ JbInterpreter >> run: programString [
 	| parser |
 	parser := JbParser new.
 	self interpret: (parser parse: programString)
+]
+
+{ #category : #accessing }
+JbInterpreter >> transcript [
+	^transcript ifNil: [Transcript]
+]
+
+{ #category : #accessing }
+JbInterpreter >> transcript: aTranscript [
+	transcript := aTranscript
+]
+
+{ #category : #accessing }
+JbInterpreter >> uimanager [
+	^ uimanager ifNil: [UIManager default]
+]
+
+{ #category : #accessing }
+JbInterpreter >> uimanager: aUIManager [
+	uimanager := aUIManager
 ]

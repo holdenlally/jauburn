@@ -4,6 +4,6 @@ Extension { #name : #JbIfNode }
 JbIfNode >> executeIn: anEnvironment [
 	(condition evaluateIn: anEnvironment)
 		ifTrue:
-			(trueStatements
-				do: [ :statement | statement evaluateIn: anEnvironment ])
+			[trueStatements
+				do: [ :statement | statement executeIn: anEnvironment ]]
 ]

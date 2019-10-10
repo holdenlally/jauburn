@@ -268,10 +268,21 @@ JbParserTest >> testStringExpression [
 
 { #category : #'tests-statements' }
 JbParserTest >> testVariableDeclarationStatement [
-
 	| stmt |
 	stmt := self parse: 'var x = 22;' rule: #variableDeclarationStatement.
 	self assert: stmt identifier equals: 'x'.
-	stmt := self parse: 'var monkey = 37*x;' rule: #variableDeclarationStatement.
+	stmt := self
+		parse: 'var monkey = 37*x;'
+		rule: #variableDeclarationStatement.
 	self assert: stmt identifier equals: 'monkey'
+]
+
+{ #category : #'tests-statements' }
+JbParserTest >> testWhileStatement [
+	| stmt |
+	stmt := self parse: 'while (y <= 10 ) {y = y + 1; x = x + 1; return x;}' rule: #whileStatement.
+	self assert: (stmt isKindOf: JbWhileLoopNode).
+	self assert: stmt condition operator equals: '<='
+	
+
 ]

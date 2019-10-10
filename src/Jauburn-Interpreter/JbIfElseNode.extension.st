@@ -3,10 +3,10 @@ Extension { #name : #JbIfElseNode }
 { #category : #'*Jauburn-Interpreter' }
 JbIfElseNode >> executeIn: anEnvironment [
 	(condition evaluateIn: anEnvironment)
-		ifTrue:
+	ifTrue:
 			[trueStatements
-				do: [:statement | statement evaluateIn: anEnvironment]]
-		ifFalse:
+				do: [:statement | statement executeIn: anEnvironment]]
+	ifFalse:
 			[falseStatements
-				do: [:statement | statement evaluateIn: anEnvironment]].
+				do: [:statement | statement executeIn: anEnvironment]].
 ]

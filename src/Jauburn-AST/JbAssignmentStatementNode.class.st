@@ -8,6 +8,11 @@ Class {
 	#category : #'Jauburn-AST-Core'
 }
 
+{ #category : #'as yet unclassified' }
+JbAssignmentStatementNode >> executeIn: environment [
+	environment at: identifier put: (expression evaluateIn: environment)
+]
+
 { #category : #accessing }
 JbAssignmentStatementNode >> expression [
 	^ expression

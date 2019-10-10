@@ -90,7 +90,29 @@ JbInterpreterTest >> testFunctionCall [
 	
 	self interpret: 'var x = function(a, b, c) {return a * b * c;};var y = x(1, 2, 3);'.
 	self assert: (interpreter environment at: 'y') equals: 6
+]
+
+{ #category : #running }
+JbInterpreterTest >> testIfElseLoop [
+	self interpret: 'var x = 0; var y = 0; if (x == 0) {x = x + 5;} else {y = y + 5;}'.
+	self assert: (interpreter environment at: 'x') equals: 5.
+	self assert: (interpreter environment at: 'y') equals: 0
 	
+]
+
+{ #category : #running }
+JbInterpreterTest >> testIfLoop [
+	self interpret: 'var y = 0; if (y < 1 ) {y = y + 1;}'.
+	self assert: (interpreter environment at: 'y') equals: 1
+]
+
+{ #category : #running }
+JbInterpreterTest >> testInput [
+	| mu |
+	mu := JbMockUIManager new.
+	interpreter uimanager: mu.
+	self interpret: 'var x = input("This is an example prompt");'.
+	self assert: (interpreter environment at: 'x') equals: 'Example user output.'
 ]
 
 { #category : #running }
@@ -129,7 +151,30 @@ JbInterpreterTest >> testPrimitiveFunctionCalls [
 ]
 
 { #category : #running }
+JbInterpreterTest >> testPrintAndPrintLn [
+	| mt |
+	mt := JbMockTranscript new.
+	interpreter transcript: mt.
+	self interpret: 'var x = print("hello");'.
+	self assert: mt contents equals: 'hello'.
+	mt clear.
+	self interpret: 'var x = print(123);'.
+	self assert: mt contents equals: '123'.
+	mt clear.
+	self interpret: 'var x = println("hello");'.
+	self interpret: 'var y = print("world");'.
+	self assert: mt contents equals:'hello
+world'
+]
+
+{ #category : #running }
 JbInterpreterTest >> testSingleArityExpression [
 	self interpret: 'var x = 3;var y = -x;'.
 	self assert: (interpreter environment at: 'y') equals: -3
+]
+
+{ #category : #running }
+JbInterpreterTest >> testWhileLoop [
+	self interpret: 'var x = 0; var y = 0; while (y < 10 ) {y = y + 1; x = x + y;}'.
+	self assert: (interpreter environment at: 'x') equals: 55
 ]
